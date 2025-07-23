@@ -12,7 +12,7 @@ const FlagsData = () => {
   useEffect(() => {
     const fetchFlagData = async () => {
       try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
+        const response = await fetch("https://restcountries.com/v3.1/all?fields=name,capital,flags,population,region,subregion,timezones,area");
         const data = await response.json();
         console.log(data);
         setFlagsData(data);
@@ -35,20 +35,26 @@ const FlagsData = () => {
       ) : (
         <Container style={{ marginTop: '100px' }} >
           <Row>
-            {flagsData?.map((country, index) => (
-              <Col key={index} md={4} lg={3} className="mb-4">
-                <Card>
-                  <Card.Img
-                    variant="top"
-                    src={country?.flags?.png}
-                    alt={country?.name?.common}
-                    style={{ height: '180px', objectFit: 'cover' }}
-                  />
-                  <Link to={`/country/${country.name.common}`}>
-                    <Button variant=" rgb(250, 87, 177)">View Details</Button></Link>
-                </Card>
-              </Col>
-            ))}
+            {Array.isArray(flagsData) ? (
+              flagsData.map((country, index) => (
+                <Col key={index} md={4} lg={3} className="mb-4">
+                  <Card>
+                    <Card.Img
+                      variant="top"
+                      src={country?.flags?.png}
+                      alt={country?.name?.common}
+                      style={{ height: '180px', objectFit: 'cover' }}
+                    />
+                    <Link to={`/country/${country.name.common}`}>
+                      <Button variant=" rgb(250, 87, 177)">View Details</Button>
+                    </Link>
+                  </Card>
+                </Col>
+              ))
+            ) : (
+              <p>No data found.</p>
+            )}
+
           </Row>
         </Container>
       )}
